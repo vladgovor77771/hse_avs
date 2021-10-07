@@ -43,7 +43,37 @@
 
 # Бенчмарки и генерация случайных данных
 
-Пока не реализовано... TODO
+Скрипт для запуска бенчмарков: `make benchmark && ./bin/app_benchmark.out`.
+
+Ниже представлен один из результатов бенчмарка на `x86_64 Intel Xeon Processor (Icelake) 12 cores 2 GHz`.
+
+```
+Sort of      50 string:          5675 nanoseconds 
+Sort of     100 string:          9073 nanoseconds 
+Sort of     500 string:        113410 nanoseconds 
+Sort of    1000 string:        260080 nanoseconds 
+Sort of    5000 string:       5471082 nanoseconds 
+Sort of   10000 string:      21745607 nanoseconds 
+Sort of   50000 string:     539900507 nanoseconds 
+Char-char encoding of string with length  50:   4067 nanoseconds 
+Char-char encoding of string with length 100:   7204 nanoseconds 
+Char-char encoding of string with length 200:   7295 nanoseconds 
+Char-char encoding of string with length 300:  11044 nanoseconds 
+Char-char encoding of string with length 400:  14668 nanoseconds 
+Char-char encoding of string with length 499:  18546 nanoseconds 
+Char-int32 encoding of string with length  50:   2008 nanoseconds 
+Char-int32 encoding of string with length 100:   3317 nanoseconds 
+Char-int32 encoding of string with length 200:   6865 nanoseconds 
+Char-int32 encoding of string with length 300:  10593 nanoseconds 
+Char-int32 encoding of string with length 400:  14717 nanoseconds 
+Char-int32 encoding of string with length 499:  19140 nanoseconds 
+Cyclic shift encoding of string with length  50:   2122 nanoseconds 
+Cyclic shift encoding of string with length 100:   3755 nanoseconds 
+Cyclic shift encoding of string with length 200:   8107 nanoseconds 
+Cyclic shift encoding of string with length 300:  12515 nanoseconds 
+Cyclic shift encoding of string with length 400:  16487 nanoseconds 
+Cyclic shift encoding of string with length 499:  21286 nanoseconds
+```
 
 # Структура данных
 
@@ -77,17 +107,23 @@ struct EncodedString {
 
 Исходный код программы находится в директории `src`. Файлы:
 
-- `main.cpp` - точка входа, минимум логики
+- `benchmark.cpp` - точка входа для выполнения бенчмарков
+- `main.cpp` - точка входа основной программы
 - `encoded_string.h` - структура и заголовки функций
 - `encoded_string.cpp` - реализация функций для структуры
 - `io.h` - заголовки функций для ввода-вывода
 - `io.cpp` - реализация ввода-вывода
 - `sort.h` - заголовки функций сортировки и вычисления ключа для нее
 - `sort.cpp` - реализация функций сортировки и вычисления ключа для нее
-- `benchmark.cpp` - TODO
 
 # Сборка
 
 Сборка осуществляется через вызов `make`, который создает необходимые `.o` файлы для последующей линковки, а также сам исполняемый файл `app.out` в директории `bin`.
+
+Также есть специальные `rules`:
+- `make clean` - очистит папку `bin/`
+- `make debug` - скомпилирует программу с дополнительными флагами `-fsanitize=address -g`
+- `make benchmark` - скомпилирует модуль для проведения бенчмарков `app_benchmark.out`
+- `make test` - алиас запуска `run_tests.sh`
 
 Также можно очистить созданные объектные и испольняемые файлы через `make clean`.
