@@ -125,5 +125,3 @@ struct EncodedString {
 - `make debug` - скомпилирует программу с дополнительными флагами `-fsanitize=address -g`
 - `make benchmark` - скомпилирует модуль для проведения бенчмарков `app_benchmark.out`
 - `make test` - алиас запуска `run_tests.sh`
-
-Также можно очистить созданные объектные и испольняемые файлы через `make clean`.
