@@ -45,7 +45,11 @@
     "streambuf": "cpp",
     "typeinfo": "cpp",
     "map": "cpp",
-    "iostream": "cpp"
+    "iostream": "cpp",
+    "chrono": "cpp",
+    "ctime": "cpp",
+    "ratio": "cpp",
+    "iomanip": "cpp"
   },
   "editor.formatOnSave": true
 }
