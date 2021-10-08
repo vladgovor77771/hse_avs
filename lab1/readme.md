@@ -35,17 +35,17 @@
 Total strings: 5
 #,string,encoding,settings
 0,abcde,Shift,1
-1,bcdef,Shift,1
-2,cdefg,Shift,1
-3,defgh,Shift,1
-4,efghi,Shift,1
+1,bcdef,Char-char,HIJKLMNO0123cdefghijklmnopqrstuvwxyzABCDEFGPQRSTUVWXYZ456789ab
+2,cdefg,Shift,4
+3,defgh,Char-int32,0 1 2 3 4 5 0 1 2 3 4 5 0 1 2 3 4 5 0 1 2 3 4 5 0 1 2 3 4 5 0 1 2 3 4 5 0 1 2 3 4 5 0 1 2 3 4 5 0 1 2 3 4 5 0 1 2 3 4 5 0 1 
+4,efghi,Shift,-5
 
 Sorted output:
 #,string,encoded
-0,efghi,fghij
-1,defgh,efghi
-2,cdefg,defgh
-3,bcdef,cdefg
+0,efghi,9abcd
+1,defgh,1 2 3 4 5 
+2,cdefg,ghijk
+3,bcdef,3cdef
 4,abcde,bcdef
 ```
 

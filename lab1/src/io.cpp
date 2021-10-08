@@ -120,7 +120,7 @@ void save_input(EncodedString** ess, uint32_t n, std::ostream& ostream) {
         } else if (ess[i]->encoding == Encoding::CharacterReplacingByNumbers) {
             ostream << "Char-int32" << ',';
             for (uint32_t j = 0; j < alphabet_length; ++j) {
-                ostream << ess[i]->encoding_settings.pairs_char_int32[j].to;
+                ostream << ess[i]->encoding_settings.pairs_char_int32[j].to << ' ';
             }
         } else {
             ostream << "Shift" << ',';
