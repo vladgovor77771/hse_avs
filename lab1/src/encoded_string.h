@@ -4,7 +4,7 @@
 #include <cstring>
 #include <iostream>
 
-const int alphabet_length = 62;
+const int32_t alphabet_length = 62;
 const char alphabet[] = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 enum Encoding { CharacterReplacing, CyclicShift, CharacterReplacingByNumbers };

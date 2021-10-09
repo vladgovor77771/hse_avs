@@ -2,8 +2,7 @@
 
 EncodedString *create_es() {
     EncodedString *es = new EncodedString;
-    char *buffer = new char[500];
-    es->str = buffer;
+    es->str = new char[500];
     return es;
 }
 
