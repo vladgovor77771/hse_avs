@@ -5,25 +5,28 @@
 Номер дополнительной функции: ((219 - 1) div 14) mod 25 + 1 = 16
 
 # Условия
+
 ## Начальные условия задачи
 
-### Обобщенный артефакт, используемый в задании 
+### Обобщенный артефакт, используемый в задании
+
 Тексты, состоящие из цифр и латинских букв, зашифрованные различными способами.
 
-### Базовые альтернативы (уникальные параметры, задающие отличительные признаки альтернатив) 
+### Базовые альтернативы (уникальные параметры, задающие отличительные признаки альтернатив)
+
 1. Шифрование заменой символов (указатель на массив пар: [текущий символ, замещающий символ]; зашифрованный текст – строка символов)
 2. Шифрование циклическим сдвигом кода каждого символа на n (целое число, определяющее сдвиг; зашифрованный текст – строка символов)
 3. Шифрование заменой символов на числа (пары: текущий символ, целое число – подстановка при шифровании кода символа в виде короткого целого; зашифрованный текст – целочисленный массив)
 
-### Общие для всех альтернатив переменные 
+### Общие для всех альтернатив переменные
 
 Открытый текст – строка символов.
 
-### Общие для всех альтернатив функции 
+### Общие для всех альтернатив функции
 
 Частное от деления суммы кодов незашифрованной строки на число символов в этой строке (действительное число)
 
-## Дополнительная функция 
+## Дополнительная функция
 
 Упорядочить элементы контейнера по убыванию используя сортировку методом деления пополам (Binary Insertion). В качестве ключей для сортировки и других действий используются результаты функции, общей для всех альтернатив
 
@@ -39,19 +42,19 @@ Total strings: 5
 0,abcde,Shift,1
 1,bcdef,Char-char,HIJKLMNO0123cdefghijklmnopqrstuvwxyzABCDEFGPQRSTUVWXYZ456789ab
 2,cdefg,Shift,4
-3,defgh,Char-int32,0 1 2 3 4 5 0 1 2 3 4 5 0 1 2 3 4 5 0 1 2 3 4 5 0 1 2 3 4 5 0 1 2 3 4 5 0 1 2 3 4 5 0 1 2 3 4 5 0 1 2 3 4 5 0 1 2 3 4 5 0 1 
+3,defgh,Char-int32,0 1 2 3 4 5 0 1 2 3 4 5 0 1 2 3 4 5 0 1 2 3 4 5 0 1 2 3 4 5 0 1 2 3 4 5 0 1 2 3 4 5 0 1 2 3 4 5 0 1 2 3 4 5 0 1 2 3 4 5 0 1
 4,efghi,Shift,-5
 
 Sorted output:
 #,string,encoded
 0,efghi,9abcd
-1,defgh,1 2 3 4 5 
+1,defgh,1 2 3 4 5
 2,cdefg,ghijk
 3,bcdef,3cdef
 4,abcde,bcdef
 ```
 
-# Тесты
+# Тесты + время выполнения программы
 
 Добавлено в общей сумме 10 тестов, которые покрывают все виды кодировок, а также проверяют правильность сортировки. Тесты лежат в директории `tests`.
 
@@ -63,6 +66,22 @@ Sorted output:
 
 Все тесты проходятся. Запуск тестирования через `/bin/sh run_tests.sh` (запускает программу, выводит в файл, затем сравнивает реальный вывод с правильным) или же `make test` (запускает `run_tests.sh`).
 
+Вывод `./run_tests.sh`
+
+```
+➜  lab1 git:(master) ✗ ./run_tests.sh
+Test ./tests/0_1.in succeeded. Time elapsed: 3122118 nanos
+Test ./tests/1_1.in succeeded. Time elapsed: 3094995 nanos
+Test ./tests/1_2.in succeeded. Time elapsed: 2662561 nanos
+Test ./tests/1_3.in succeeded. Time elapsed: 2859980 nanos
+Test ./tests/2_1.in succeeded. Time elapsed: 2561097 nanos
+Test ./tests/2_2.in succeeded. Time elapsed: 2488556 nanos
+Test ./tests/2_3.in succeeded. Time elapsed: 2505265 nanos
+Test ./tests/3_1.in succeeded. Time elapsed: 2400389 nanos
+Test ./tests/3_2.in succeeded. Time elapsed: 2468610 nanos
+Test ./tests/4_1.in succeeded. Time elapsed: 2329275 nanos
+```
+
 # Бенчмарки и генерация случайных данных
 
 Скрипт для запуска бенчмарков: `make benchmark && ./bin/app_benchmark.out`.
@@ -70,30 +89,30 @@ Sorted output:
 Ниже представлен один из результатов бенчмарка на `x86_64 Intel Xeon Processor (Icelake) 12 cores 2 GHz`.
 
 ```
-Sort of      50 string:          5675 nanoseconds 
-Sort of     100 string:          9073 nanoseconds 
-Sort of     500 string:        113410 nanoseconds 
-Sort of    1000 string:        260080 nanoseconds 
-Sort of    5000 string:       5471082 nanoseconds 
-Sort of   10000 string:      21745607 nanoseconds 
-Sort of   50000 string:     539900507 nanoseconds 
-Char-char encoding of string with length  50:   4067 nanoseconds 
-Char-char encoding of string with length 100:   7204 nanoseconds 
-Char-char encoding of string with length 200:   7295 nanoseconds 
-Char-char encoding of string with length 300:  11044 nanoseconds 
-Char-char encoding of string with length 400:  14668 nanoseconds 
-Char-char encoding of string with length 499:  18546 nanoseconds 
-Char-int32 encoding of string with length  50:   2008 nanoseconds 
-Char-int32 encoding of string with length 100:   3317 nanoseconds 
-Char-int32 encoding of string with length 200:   6865 nanoseconds 
-Char-int32 encoding of string with length 300:  10593 nanoseconds 
-Char-int32 encoding of string with length 400:  14717 nanoseconds 
-Char-int32 encoding of string with length 499:  19140 nanoseconds 
-Cyclic shift encoding of string with length  50:   2122 nanoseconds 
-Cyclic shift encoding of string with length 100:   3755 nanoseconds 
-Cyclic shift encoding of string with length 200:   8107 nanoseconds 
-Cyclic shift encoding of string with length 300:  12515 nanoseconds 
-Cyclic shift encoding of string with length 400:  16487 nanoseconds 
+Sort of      50 string:          5675 nanoseconds
+Sort of     100 string:          9073 nanoseconds
+Sort of     500 string:        113410 nanoseconds
+Sort of    1000 string:        260080 nanoseconds
+Sort of    5000 string:       5471082 nanoseconds
+Sort of   10000 string:      21745607 nanoseconds
+Sort of   50000 string:     539900507 nanoseconds
+Char-char encoding of string with length  50:   4067 nanoseconds
+Char-char encoding of string with length 100:   7204 nanoseconds
+Char-char encoding of string with length 200:   7295 nanoseconds
+Char-char encoding of string with length 300:  11044 nanoseconds
+Char-char encoding of string with length 400:  14668 nanoseconds
+Char-char encoding of string with length 499:  18546 nanoseconds
+Char-int32 encoding of string with length  50:   2008 nanoseconds
+Char-int32 encoding of string with length 100:   3317 nanoseconds
+Char-int32 encoding of string with length 200:   6865 nanoseconds
+Char-int32 encoding of string with length 300:  10593 nanoseconds
+Char-int32 encoding of string with length 400:  14717 nanoseconds
+Char-int32 encoding of string with length 499:  19140 nanoseconds
+Cyclic shift encoding of string with length  50:   2122 nanoseconds
+Cyclic shift encoding of string with length 100:   3755 nanoseconds
+Cyclic shift encoding of string with length 200:   8107 nanoseconds
+Cyclic shift encoding of string with length 300:  12515 nanoseconds
+Cyclic shift encoding of string with length 400:  16487 nanoseconds
 Cyclic shift encoding of string with length 499:  21286 nanoseconds
 ```
 
@@ -139,24 +158,27 @@ struct EncodedString {
 
 ![стек вызовов](images/stack.png)
 
-# Декомпозиция
+# Декомпозиция + размер кода
 
 Исходный код программы находится в директории `src`. Файлы:
 
-- `benchmark.cpp` - точка входа для выполнения бенчмарков
-- `main.cpp` - точка входа основной программы
-- `encoded_string.h` - структура и заголовки функций
-- `encoded_string.cpp` - реализация функций для структуры
-- `io.h` - заголовки функций для ввода-вывода
-- `io.cpp` - реализация ввода-вывода
-- `sort.h` - заголовки функций сортировки и вычисления ключа для нее
-- `sort.cpp` - реализация функций сортировки и вычисления ключа для нее
+- `benchmark.cpp` (4518 bytes) - точка входа для выполнения бенчмарков
+- `main.cpp` (1321 bytes) - точка входа основной программы
+- `encoded_string.h` (877 bytes) - структура и заголовки функций
+- `encoded_string.cpp` (2495 bytes) - реализация функций для структуры
+- `io.h` (460 bytes) - заголовки функций для ввода-вывода
+- `io.cpp` (5588 bytes) - реализация ввода-вывода
+- `sort.h` (180 bytes) - заголовки функций сортировки и вычисления ключа для нее
+- `sort.cpp` (1225 bytes) - реализация функций сортировки и вычисления ключа для нее
+
+Размер файлов брался из вывода `ls -l`.
 
 # Сборка
 
 Сборка осуществляется через вызов `make`, который создает необходимые `.o` файлы для последующей линковки, а также сам исполняемый файл `app.out` в директории `bin`.
 
 Также есть специальные `rules`:
+
 - `make clean` - очистит папку `bin/`
 - `make debug` - скомпилирует программу с дополнительными флагами `-fsanitize=address -g`
 - `make benchmark` - скомпилирует модуль для проведения бенчмарков `app_benchmark.out`
