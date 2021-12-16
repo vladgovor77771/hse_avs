@@ -32,8 +32,8 @@ void benchmark_encode_char_char(int str_length) {
     t1 = clock();
     EncryptData(es);
     t2 = clock();
-    double time_taken = ((double)(t2 - t1)) / CLOCKS_PER_SEC;
-    printf("Char-char encoding of string with length %d: %f seconds\n", str_length, time_taken);
+    double time_taken = ((double)(t2 - t1)) / CLOCKS_PER_SEC * 1000000000;
+    printf("Char-char encoding of string with length %d: %f nanoseconds\n", str_length, time_taken);
 
     free(es->str);
     free(es->encoded.str);
@@ -57,8 +57,9 @@ void benchmark_encode_char_int32(int str_length) {
     t1 = clock();
     EncryptData(es);
     t2 = clock();
-    double time_taken = ((double)(t2 - t1)) / CLOCKS_PER_SEC;
-    printf("Char-int32 encoding of string with length %d: %f seconds\n", str_length, time_taken);
+    double time_taken = ((double)(t2 - t1)) / CLOCKS_PER_SEC * 1000000000;
+    printf("Char-int32 encoding of string with length %d: %f nanoseconds\n", str_length,
+           time_taken);
 
     free(es->str);
     free(es->encoded.str);
@@ -78,8 +79,8 @@ void benchmark_encode_shift(int str_length) {
     t1 = clock();
     EncryptData(es);
     t2 = clock();
-    double time_taken = ((double)(t2 - t1)) / CLOCKS_PER_SEC;
-    printf("Shift encoding of string with length %d: %f seconds\n", str_length, time_taken);
+    double time_taken = ((double)(t2 - t1)) / CLOCKS_PER_SEC * 1000000000;
+    printf("Shift encoding of string with length %d: %f nanoseconds\n", str_length, time_taken);
 
     free(es->str);
     free(es->encoded.str);
@@ -99,9 +100,9 @@ void benchmark_sort(int n) {
     t1 = clock();
     DoSort(ess, n);
     t2 = clock();
-    double time_taken = ((double)(t2 - t1)) / CLOCKS_PER_SEC;
+    double time_taken = ((double)(t2 - t1)) / CLOCKS_PER_SEC * 1000000000;
 
-    printf("Sort of %d strings: %f seconds\n", n, time_taken);
+    printf("Sort of %d strings: %f nanoseconds\n", n, time_taken);
 
     for (int i = 0; i < n; ++i) {
         free(ess[i]->str);
@@ -114,13 +115,13 @@ void benchmark_sort(int n) {
 int main() {
     srand(time(NULL));
 
-    benchmark_sort(50);
-    benchmark_sort(100);
-    benchmark_sort(500);
-    benchmark_sort(1000);
-    benchmark_sort(5000);
-    benchmark_sort(10000);
-    benchmark_sort(50000);
+    // benchmark_sort(50);
+    // benchmark_sort(100);
+    // benchmark_sort(500);
+    // benchmark_sort(1000);
+    // benchmark_sort(5000);
+    // benchmark_sort(10000);
+    // benchmark_sort(50000);
 
     benchmark_encode_char_char(50);
     benchmark_encode_char_char(100);

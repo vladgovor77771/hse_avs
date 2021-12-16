@@ -49,7 +49,10 @@
     "chrono": "cpp",
     "ctime": "cpp",
     "ratio": "cpp",
-    "iomanip": "cpp"
+    "iomanip": "cpp",
+    "condition_variable": "cpp",
+    "mutex": "cpp",
+    "thread": "cpp"
   },
   "editor.formatOnSave": true
 }
