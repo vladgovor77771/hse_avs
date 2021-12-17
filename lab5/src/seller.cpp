@@ -39,8 +39,7 @@ const size_t Seller::queueSize() {
 }
 
 void Seller::emulate() {
-    PrintThread{} << "[DEBUG] thread #" << std::this_thread::get_id()
-                  << " (seller): started emulation\n";
+    PrintThread{} << " (seller): started emulation\n";
 
     srand(time(NULL));
     while (!queue_.empty() || !*stop_) {
@@ -48,8 +47,7 @@ void Seller::emulate() {
         {
             std::unique_lock<std::mutex> mlock(queue_mutex_);
             if (queue_.empty()) {
-                PrintThread{} << "[DEBUG] thread #" << std::this_thread::get_id()
-                              << " (seller): queue empty, waiting for clients\n";
+                PrintThread{} << " (seller): queue empty, waiting for clients\n";
                 cond_.wait_for(mlock, std::chrono::seconds(5));
             }
             if (queue_.empty()) {
@@ -62,10 +60,8 @@ void Seller::emulate() {
         std::this_thread::sleep_for(std::chrono::milliseconds(sleep_time));
         current_client_cv->notify_one();
 
-        PrintThread{} << "[DEBUG] thread #" << std::this_thread::get_id()
-                      << " (seller): processed client\n";
+        PrintThread{} << " (seller): processed client\n";
     }
-    PrintThread{} << "[DEBUG] thread #" << std::this_thread::get_id()
-                  << " (seller): stopped emulation\n";
+    PrintThread{} << " (seller): stopped emulation\n";
     Stop::getInstance()->inc();
 }

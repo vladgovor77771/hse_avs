@@ -35,8 +35,7 @@ Client::~Client() {
 }
 
 void Client::emulate() {
-    PrintThread{} << "[DEBUG] thread #" << std::this_thread::get_id()
-                  << " (client): started emulation, need to buy " << list_->size() << " products\n";
+    PrintThread{} << " (client): started emulation, need to buy " << list_->size() << " products\n";
     while (current_product_ < list_->size()) {
         market_->getInQueue(list_->products()[current_product_], &cv);
 
@@ -47,6 +46,5 @@ void Client::emulate() {
         }
         ++current_product_;
     }
-    PrintThread{} << "[DEBUG] thread #" << std::this_thread::get_id()
-                  << " (client): stopped emulation\n";
+    PrintThread{} << " (client): stopped emulation\n";
 }

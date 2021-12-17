@@ -27,8 +27,7 @@ void deleteClients(Client** clients) {
 
 int main() {
     Market* market = new Market();
-    PrintThread{} << "[DEBUG] thread #" << std::this_thread::get_id() << " (main): "
-                  << "created market\n";
+    PrintThread{} << " (main): created market\n";
 
     auto clients = initClients(market);
 
