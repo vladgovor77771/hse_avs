@@ -1,9 +1,14 @@
-#ifndef CLIENT_H
-#define CLIENT_H
-
+#pragma once
 #include <condition_variable>
 #include <mutex>
 #include <thread>
+
+#include "constants.h"
+#include "iostream"
+#include "log.h"
+#include "market.h"
+#include "random"
+#include "time.h"
 
 class ShoppingList {
 public:
@@ -20,16 +25,14 @@ private:
 
 class Client {
 public:
-    Client();
+    Client(Market* market);
     ~Client();
     std::mutex mutex;
     std::condition_variable cv;
-    bool processed = false;
     void emulate();
 
 private:
     ShoppingList* list_ = ShoppingList::random();
     int current_product_ = 0;
+    Market* market_;
 };
-
-#endif

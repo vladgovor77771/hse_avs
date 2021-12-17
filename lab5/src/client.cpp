@@ -1,14 +1,4 @@
-#ifndef CLIENT_CPP
-#define CLIENT_CPP
-
 #include "client.h"
-
-#include "constants.h"
-#include "iostream"
-#include "random"
-#include "seller.h"
-#include "shared_resources.h"
-#include "time.h"
 
 ShoppingList::ShoppingList() {
     srand(time(NULL));
@@ -35,31 +25,28 @@ ShoppingList* ShoppingList::random() {
     return new ShoppingList();
 }
 
-Client::Client() {
+Client::Client(Market* market) {
+    market_ = market;
 }
 
 Client::~Client() {
     delete list_;
+    // market must be removed outside
 }
 
 void Client::emulate() {
-    if (!sellers) {
-        std::cout << "Sellers not initialized\n";
-        return;
-    }
+    PrintThread{} << "[DEBUG] thread #" << std::this_thread::get_id()
+                  << " (client): started emulation, need to buy " << list_->size() << " products\n";
     while (current_product_ < list_->size()) {
-        int current_seller_index = list_->products()[current_product_] / amount_of_products;
-        Seller* current_seller = sellers[current_seller_index];
-        current_seller->queueAdd(this);
-        std::cout << "Client thread " << std::this_thread::get_id() << " added self to queue "
-                  << current_seller_index << '\n';
-        // Wait until seller change processed on self
+        market_->getInQueue(list_->products()[current_product_], &cv);
+
+        // Wait until seller notify client's cv
         {
             std::unique_lock<std::mutex> lk(mutex);
-            cv.wait(lk, [this] { return !processed; });
+            cv.wait(lk);
         }
         ++current_product_;
     }
+    PrintThread{} << "[DEBUG] thread #" << std::this_thread::get_id()
+                  << " (client): stopped emulation\n";
 }
-
-#endif

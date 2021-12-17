@@ -3,36 +3,39 @@
 #include <thread>
 
 #include "client.h"
-#include "constants.h"
-#include "seller.h"
-#include "shared_resources.h"
+#include "log.h"
+#include "market.h"
 
-void initSellers() {
-    sellers = new Seller*[amount_of_sellers];
-    for (int i = 0; i < amount_of_sellers; ++i) {
-        auto seller = new Seller();
-        sellers[i] = seller;
-        std::thread ts(&Seller::emulate, seller);
+Client** initClients(Market* market) {
+    Client** res = new Client*[amount_of_clients];
+    for (int i = 0; i < amount_of_clients; ++i) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(800));
+        auto client = new Client(market);
+        res[i] = client;
+        std::thread tc(&Client::emulate, client);
+        tc.detach();
     }
+    return res;
 }
 
-void clearSellers() {
-    while (sellers_stopped != amount_of_sellers) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(200));
+void deleteClients(Client** clients) {
+    for (int i = 0; i < amount_of_clients; ++i) {
+        delete clients[i];
     }
-    for (int i = 0; i < amount_of_sellers; ++i) {
-        delete sellers[i];
-    }
-    delete[] sellers;
+    delete[] clients;
 }
 
 int main() {
-    initSellers();
-    auto client = new Client();
-    std::thread tc(&Client::emulate, client);
-    tc.join();
-    stop = true;
-    clearSellers();
-    delete client;
+    Market* market = new Market();
+    PrintThread{} << "[DEBUG] thread #" << std::this_thread::get_id() << " (main): "
+                  << "created market\n";
+
+    auto clients = initClients(market);
+
+    std::this_thread::sleep_for(std::chrono::seconds(main_sleep_seconds));
+
+    delete market;
+    deleteClients(clients);
+
     return 0;
 }
