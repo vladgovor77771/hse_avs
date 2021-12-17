@@ -96,6 +96,11 @@ void benchmark_sort(int n) {
         ess[i]->encoded.str = (char*)malloc(sizeof(char) * 500);
     }
 
+    // Здесь обязательное предварительное вычисление ключей и запись в память
+    for (int i = 0; i < n; i++) {
+        ess[i]->key = CalcKey(ess + i);
+    }
+
     clock_t t1, t2;
     t1 = clock();
     DoSort(ess, n);
@@ -115,13 +120,13 @@ void benchmark_sort(int n) {
 int main() {
     srand(time(NULL));
 
-    // benchmark_sort(50);
-    // benchmark_sort(100);
-    // benchmark_sort(500);
-    // benchmark_sort(1000);
-    // benchmark_sort(5000);
-    // benchmark_sort(10000);
-    // benchmark_sort(50000);
+    benchmark_sort(50);
+    benchmark_sort(100);
+    benchmark_sort(500);
+    benchmark_sort(1000);
+    benchmark_sort(5000);
+    benchmark_sort(10000);
+    benchmark_sort(20000);
 
     benchmark_encode_char_char(50);
     benchmark_encode_char_char(100);

@@ -57,7 +57,10 @@ int main(int argc, char* argv[]) {
     }
     fclose(f);
 
-    // Вызов сортировки
+    // Вызов сортировки с предварительным вычислением ключей
+    for (int i = 0; i < cnt; i++) {
+        arr[i]->key = CalcKey(arr + i);
+    }
     DoSort(arr, cnt);
     // Вызов шифрования
     for (int i = 0; i < cnt; i++) {

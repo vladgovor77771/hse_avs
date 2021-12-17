@@ -1,10 +1,29 @@
 section .text
 
-; Процедура вычисления ключа
-global CalcKey
-CalcKey:
+; Процедура получения ключа из памяти
+GetKey:    
+    
     mov rsi,rdi ; rdi - аргумент фукции, указатель на struct Data
     ; Загружаем ссылку на данные и копируем в rsi для чтения
+    lodsq
+    mov rsi,rax
+    
+    add rsi,28
+    lodsq
+    cvtsi2ss xmm0,rax
+        
+    ret 
+
+; Процедура вычисления ключа по строке
+    global CalcKey
+CalcKey:    
+    
+    mov rsi,rdi ; rdi - аргумент фукции, указатель на struct Data
+    ; Загружаем ссылку на данные и копируем в rsi для чтения
+    lodsq
+    mov rsi,rax
+    
+    ; Здесь грузим именно указатель на строку char * str
     lodsq
     mov rsi,rax
     
@@ -12,14 +31,14 @@ CalcKey:
     xor r10,r10
     xor r11,r11
 cicle1:
-    ; Здесь грузим байьт из rsi, и если он нулевой - то конец цикла
+    ; Здесь грузим байт из rsi, и если он нулевой - то конец цикла
     xor rax,rax
     lodsb 
     cmp al,0
     je fin1    
     ; иначе увеличиваем сумму и количество
     add r10,rax
-    inc r11
+    inc r11        
     jmp cicle1
 
 fin1:
@@ -248,6 +267,70 @@ ProcSwap:
     pop rax    
     ret
 
+; Внутренняя процедура - извлечь значение по адресу в массиве
+ProcGetV:    
+    push rbx 
+    push rcx
+    push rdx
+    
+    ; Переводим индекс в размер, умножив на 8
+    mov rax,rdi
+    mov r12,8
+    mul r12
+    add rax,r10 ;  Добавляем к указателю начала массива
+    mov rsi,rax
+    
+    lodsq    
+    
+    pop rdx
+    pop rcx
+    pop rbx
+    ret
+
+; Внутренняя процедура - установить значение по адресу в массиве
+ProcSetV:    
+    push rbx 
+    push rcx
+    push rdx
+    
+    mov rbx,rsi
+    ; Переводим индекс в размер, умножив на 8
+    mov rax,rdi    
+    mov r12,8
+    mul r12
+    add rax,r10 ;  Добавляем к указателю начала массива
+    mov rdi,rax
+    mov rax,rbx
+    
+    stosq
+    
+    pop rdx
+    pop rcx
+    pop rbx
+    ret
+
+; Внутренняя процедура - поднять значение в массиве, data[rax+1]=data[rax]
+ProcUpData:    
+    push rbx 
+    push rcx
+    push rdx
+    
+    ; Переводим индекс в размер, умножив на 8
+    mov rax,rdi    
+    mov r12,8
+    mul r12
+    add rax,r10 ;  Добавляем к указателю начала массива
+    mov rsi,rax
+    lodsq
+    mov rdi,rsi
+    stosq
+    
+    pop rdx
+    pop rcx
+    pop rbx
+    ret
+
+
 ; Внутреняя процедура вычисления ключа по индексу - передаем индекс массива, 
 ; получаем в xmm0 значение ключа
 CalcKeyByIndex:    
@@ -264,10 +347,8 @@ CalcKeyByIndex:
     mov r12,8
     mul r12
     add rax,r10 ;  Добавляем к указателю начала массива
-    mov rsi,rax 
-    lodsq  ; Загружаем адрес структуры
     mov rdi,rax ;  и вызываем процедуру вычисления ключа
-    call CalcKey
+    call GetKey
     
     pop r11
     pop r10
@@ -285,42 +366,63 @@ DoSort:
     mov r10,rdi ; Запоминаем указатель на массив
     mov r11,rsi ; Запоминаем число значений в массиве
                                 
-mainloop:        
-    mov r9,0
-    mov rax,0 ; в регистре текущий индекс
-    mov rbx,r11
-    dec rbx ; Здесь число сравнений
-sortloop:        
+    mov rbx,1 ; в регистре текущий индекс - i    
+
+loopi:    
     ; Вычисление и сравнение ключей
-    mov rdi,rax
+    mov rdi,rbx    
     call CalcKeyByIndex
-    movss xmm9,xmm0
+    movss xmm9,xmm0 ; xmm9 это key
     
-    mov rdi,rax
-    inc rdi            
+    mov rdi,rbx    
+    call ProcGetV
+    mov r9,rax ; в r9 теперь значение по адресу i        
+        
+    mov rcx,rbx
+    dec rcx   ; rcx это j
+
+loopj:            
+    mov rdi,rcx
     call CalcKeyByIndex
-    
-    ; Сравнениваем два вещественных числа
-    cmpss xmm9,xmm0,6
-    movmskps edx,xmm9
+        
+    ; Сравниваем два вещественных числа
+    ; xmm9<=xmm0   key<=data[j]
+    cmpss xmm0,xmm9,6
+    movmskps edx,xmm0
     cmp edx,0
     ; Если порядок правильный, то конец
-    je skipexc 
-    ; Иначе передаем индекс для обмена
-    mov rdi,rax
-    call ProcSwap
-    mov r9,1
-
-skipexc:    
-   ; Нужно делать обмен, пока не дошли до конца
-    inc rax
-    cmp rax,rbx
-    jl sortloop 
+    je restkey 
         
-     ; но если обмен так и не случился, то конец обработке
-    cmp r9,1
-    je mainloop
+    mov rdi,rcx
+    call ProcUpData
     
+    ; Если уже достигли 0, то следующий цикл не нужен
+    cmp rcx,0    
+    je restkey0
+    
+    dec rcx    
+    jmp loopj      
+
+restkey:       
+    ; A[j+1]= из памяти
+    mov rdi,rcx
+    inc rdi
+    mov rsi,r9
+    call ProcSetV
+    jmp ipp
+
+restkey0:       
+    ; A[-1+1]= из памяти
+    mov rdi,0
+    mov rsi,r9
+    call ProcSetV
+        
+ipp:    
+    ; i++ i<length
+    inc rbx
+    cmp rbx,r11
+    jl loopi
+        
     ret
 
     
