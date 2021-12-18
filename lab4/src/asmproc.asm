@@ -14,8 +14,8 @@ GetKey:
         
     ret 
 
-; Процедура вычисления ключа по строке
-    global CalcKey
+; Функция вычисления ключа по строке
+global CalcKey
 CalcKey:    
     
     mov rsi,rdi ; rdi - аргумент фукции, указатель на struct Data
@@ -89,10 +89,9 @@ next3:
 next4:    
     sub al,36
     add al,'A' ; диапазон индексов алфавита - 36-61     
-    ret
-    
-    ; Процедура шифрования сдвигом
-    global EncryptShift
+    ret   
+; Процедура шифрования сдвигом
+global EncryptShift
 EncryptShift:
     mov rsi,rdi ; rdi - аргумент фукции, указатель на struct Data
     
@@ -134,8 +133,8 @@ fin2:
     
     ret    
 
-    ; Процедура шифрования заменой
-    global EncryptChar
+; Процедура шифрования заменой
+global EncryptChar
 EncryptChar:
     mov rsi,rdi
     ; rsi - аргумент фукции, указатель на struct Data
@@ -203,14 +202,13 @@ cicle4:
     jmp cicle4
     
 fin4:
-    
     ; здесь не нужен терминальный нуль - выходные данные это массив чисел
     
     ret    
 
 
-    ; Процедура шифрования
-    global EncryptData
+; Процедура шифрования (та, что вызывается из С кода)
+global EncryptData
 EncryptData:
     mov rsi,rdi  ; rdi - аргумент фукции, указатель на struct Data
 
@@ -359,10 +357,9 @@ CalcKeyByIndex:
     pop rax
     ret
 
-    ; Процедура сортировки
-    global DoSort:function
+; Процедура сортировки
+global DoSort:function
 DoSort:
-    
     mov r10,rdi ; Запоминаем указатель на массив
     mov r11,rsi ; Запоминаем число значений в массиве
                                 
@@ -424,5 +421,3 @@ ipp:
     jl loopi
         
     ret
-
-    

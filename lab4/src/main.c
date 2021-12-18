@@ -51,7 +51,7 @@ int main(int argc, char* argv[]) {
             arr[i]->settings.nums = (u_int8_t*)malloc(sizeof(u_int8_t) * (alphabet_length));
             // для третьего типа - отдельно читаем числа
             for (int j = 0; j < alphabet_length; j++) {
-                fscanf(f, "%u", arr[i]->settings.nums + j);
+                fscanf(f, "%hhu", arr[i]->settings.nums + j);
             }
         }
     }
